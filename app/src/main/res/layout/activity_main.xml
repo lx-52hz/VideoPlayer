@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity"
+        android:columnCount="2"
+        android:rowCount="3">
+
+        <Button
+            android:id="@+id/play_1_video"
+            android:text="播放1个视频"
+            android:textSize="30sp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_row="0"/>
+
+        <Button
+            android:id="@+id/play_full_video"
+            android:text="播放并且可以切到全屏"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_row="1"/>
+
+        <Button
+            android:id="@+id/play_clip_video"
+            android:text="播放视频被裁剪"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_row="2"/>
+
+
+        <Button
+            android:id="@+id/play_5_video"
+            android:text="播放5个视频-LEXUS"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_row="0"/>
+
+        <Button
+            android:id="@+id/play_5_video_huawei"
+            android:text="播放5个视频-HUAWEI"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_row="1"/>
+
+        <Button
+            android:id="@+id/play_4_video_fanya"
+            android:text="播放4个视频-FANYA"
+            android:layout_width="0dp"
+            android:textSize="30sp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_row="2"/>
+
+    </GridLayout>
+</layout>
