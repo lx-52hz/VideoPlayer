@@ -10,8 +10,8 @@
 
         <SurfaceView
             android:id="@+id/play_video_surf"
-            android:layout_width="480dp"
-            android:layout_height="270dp"
+            android:layout_width="640dp"
+            android:layout_height="360dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,14 +26,25 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
+            android:id="@+id/surf_back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:text="点击返回"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/surf_in_full_btn"
+            app:layout_constraintBottom_toTopOf="@+id/player_control_view"/>
+
+        <Button
             android:id="@+id/surf_in_full_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="10dp"
             android:text="点击进入全屏"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/surf_out_full_btn" />
+            app:layout_constraintStart_toEndOf="@+id/surf_back_btn"
+            app:layout_constraintBottom_toTopOf="@+id/player_control_view"
+            app:layout_constraintEnd_toStartOf="@+id/surf_out_full_btn"
+            />
 
         <Button
             android:id="@+id/surf_out_full_btn"
@@ -41,7 +52,7 @@
             android:layout_height="wrap_content"
             android:elevation="10dp"
             android:text="点击退出全屏"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/surf_in_full_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/player_control_view" />
 

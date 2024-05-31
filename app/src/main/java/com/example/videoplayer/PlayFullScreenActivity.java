@@ -14,8 +14,10 @@ import androidx.media3.exoplayer.drm.DrmSessionManager;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Surface;
 import android.view.SurfaceControl;
 import android.view.SurfaceHolder;
@@ -31,6 +33,9 @@ public class PlayFullScreenActivity extends AppCompatActivity {
     private static SurfaceControl surfaceControl;
     private static ExoPlayer player;
     private static Surface videoSurface;
+
+    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video5.mp4";
+//    private String path = "asset:///video5.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +100,12 @@ public class PlayFullScreenActivity extends AppCompatActivity {
             dataBinding.playVideoSurfFull.setVisibility(View.GONE);
             dataBinding.playVideoSurf.setVisibility(View.VISIBLE);
         });
+
+        dataBinding.surfBackBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @OptIn(markerClass = UnstableApi.class)
@@ -102,7 +113,7 @@ public class PlayFullScreenActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this);
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .setDrmSessionManagerProvider(unusedMediaItem -> DrmSessionManager.DRM_UNSUPPORTED)
-                .createMediaSource(MediaItem.fromUri(Uri.parse("asset:///video5_1.mp4")));
+                .createMediaSource(MediaItem.fromUri(Uri.parse(path)));
 
         ExoPlayer player = new ExoPlayer.Builder(getApplicationContext()).build();
         player.setMediaSource(mediaSource);

@@ -1,15 +1,9 @@
 package com.example.videoplayer;
 
-import static androidx.media3.common.Player.EVENT_IS_PLAYING_CHANGED;
-import static androidx.media3.common.Player.EVENT_PLAYBACK_STATE_CHANGED;
-import static androidx.media3.common.Player.EVENT_PLAY_WHEN_READY_CHANGED;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.media3.common.MediaItem;
-import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.datasource.DataSource;
@@ -22,16 +16,10 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceControl;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
+import android.os.Environment;
 import android.widget.SeekBar;
 
 import com.example.videoplayer.databinding.ActivityOneVideoBinding;
-import com.example.videoplayer.databinding.ActivityPlayFullScreenBinding;
 
 import java.util.Locale;
 
@@ -43,6 +31,9 @@ public class OneVideoActivity extends AppCompatActivity {
     private static ExoPlayer player;
     private int playbackState;
     private StringBuilder playProgress = new StringBuilder("00:00");
+
+    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video5.mp4";
+//    private String path = "asset:///video5.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +54,7 @@ public class OneVideoActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this);
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                 .setDrmSessionManagerProvider(unusedMediaItem -> DrmSessionManager.DRM_UNSUPPORTED)
-                .createMediaSource(MediaItem.fromUri(Uri.parse("asset:///video3.mp4")));
+                .createMediaSource(MediaItem.fromUri(Uri.parse(path)));
 
         player.setMediaSource(mediaSource);
         player.setVideoTextureView(dataBinding.view2);
