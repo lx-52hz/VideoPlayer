@@ -10,7 +10,10 @@
         android:columnCount="4"
         android:rowCount="4">
 
-        <ImageView
+        <Button
+            android:id="@+id/play_video_with_gl"
+            android:text="通过OpenGL渲染"
+            android:textSize="30sp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"

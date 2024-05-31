@@ -16,6 +16,7 @@ import com.example.videoplayer.databinding.ActivityMainBinding;
 import com.example.videoplayer.fivevideo.PlayFiveOnHuaweiActivity;
 import com.example.videoplayer.fivevideo.PlayFiveSameActivity;
 import com.example.videoplayer.fivevideo.PlayFiveVideosActivity;
+import com.example.videoplayer.glplayer.GLPlayerActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mainBinding.play5VideoHuawei.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFiveOnHuaweiActivity.class)));
         mainBinding.play4VideoFanya.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFiveSameActivity.class)));
         mainBinding.playClipVideo.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ClipActivity.class)));
+        mainBinding.playVideoWithGl.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, GLPlayerActivity.class)));
     }
 
     private void requestPermission() {
