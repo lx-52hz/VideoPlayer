@@ -39,7 +39,6 @@ import java.util.Locale;
 
 import javax.microedition.khronos.opengles.GL10;
 
-
 @OptIn(markerClass = UnstableApi.class)
 public final class BitmapVideoProcessor implements PlayerGLSurfaceView.VideoProcessor {
 
@@ -84,8 +83,8 @@ public final class BitmapVideoProcessor implements PlayerGLSurfaceView.VideoProc
     public void initialize() {
         try {
             program = new GlProgram(context,
-                    "bitmap_overlay_video_processor_vertex.glsl",
-                    "bitmap_overlay_video_processor_fragment.glsl");
+                    "bitmap_video_processor_vertex.glsl",
+                    "bitmap_video_processor_fragment.glsl");
         } catch (IOException e) {
             throw new IllegalStateException(e);
         } catch (GlUtil.GlException e) {
@@ -123,7 +122,7 @@ public final class BitmapVideoProcessor implements PlayerGLSurfaceView.VideoProc
         String text = String.format(Locale.US, "%.02f", frameTimestampUs / (float) C.MICROS_PER_SECOND);
         overlayBitmap.eraseColor(Color.TRANSPARENT);
         overlayCanvas.drawBitmap(logoBitmap, 32, 32, paint);
-        overlayCanvas.drawText(text, /* x= */ 200, /* y= */ 130, paint);
+        overlayCanvas.drawText(text, 200, 130, paint);
 
         GLES20.glBindTexture(GL10.GL_TEXTURE_2D, textures[0]);
         GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, overlayBitmap);

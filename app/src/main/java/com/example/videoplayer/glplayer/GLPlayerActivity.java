@@ -12,20 +12,15 @@ import androidx.media3.exoplayer.drm.DrmSessionManager;
 import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 import androidx.media3.exoplayer.util.EventLogger;
-import androidx.media3.ui.PlayerView;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 
 import com.example.videoplayer.MainActivity;
-import com.example.videoplayer.OneVideoActivity;
 import com.example.videoplayer.R;
+import com.example.videoplayer.databinding.ActivityGlplayerBinding;
 
 @OptIn(markerClass = UnstableApi.class)
 public class GLPlayerActivity extends AppCompatActivity {
@@ -34,7 +29,7 @@ public class GLPlayerActivity extends AppCompatActivity {
 
     private static final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video5.mp4";
 
-//    private ActivityGlplayerBinding dataBinding;
+    private ActivityGlplayerBinding dataBinding;
     private ProgressiveMediaSource.Factory sourceFactory;
     private ExoPlayer player;
     private PlayerGLSurfaceView playerGLSurfaceView;
@@ -42,22 +37,16 @@ public class GLPlayerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_glplayer);
-
-//        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_glplayer);
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_glplayer);
 
         sourceFactory = new ProgressiveMediaSource.Factory(new DefaultDataSource.Factory(this))
                 .setDrmSessionManagerProvider(unusedMediaItem -> DrmSessionManager.DRM_UNSUPPORTED);
 
-
         playerGLSurfaceView = new PlayerGLSurfaceView(getApplicationContext(),
                 false, new BitmapVideoProcessor(getApplicationContext()));
 
-        FrameLayout contentFrame  = findViewById(R.id.gl_player_frame_layout);
-        contentFrame.addView(playerGLSurfaceView);
-
-        Button backBtn = findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(v -> {
+        dataBinding.glPlayerFrameLayout.addView(playerGLSurfaceView);
+        dataBinding.backBtn.setOnClickListener(v -> {
             startActivity(new Intent(GLPlayerActivity.this, MainActivity.class));
             finish();
         });
@@ -79,6 +68,7 @@ public class GLPlayerActivity extends AppCompatActivity {
         player.prepare();
 
         playerGLSurfaceView.setPlayer(player);
+        dataBinding.playerControlView.setPlayer(player);
         player.addAnalyticsListener(new EventLogger());
     }
 
