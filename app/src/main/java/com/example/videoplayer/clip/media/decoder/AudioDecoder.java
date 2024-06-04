@@ -26,21 +26,17 @@ public class AudioDecoder extends BaseDecoder {
 
     @NonNull
     public IExtractor initExtractor(@NonNull String path) {
-        return (IExtractor) (new AudioExtractor(path));
+        return new AudioExtractor(path);
     }
 
     public void initSpecParams(@NonNull MediaFormat format) {
-        try {
-            this.mChannels = format.getInteger("channel-count");
-            this.mSampleRate = format.getInteger("sample-rate");
-            this.mPCMEncodeBit = format.containsKey("pcm-encoding") ? format.getInteger("pcm-encoding") : 2;
-        } catch (Exception var3) {
-        }
-
+        this.mChannels = format.getInteger("channel-count");
+        this.mSampleRate = format.getInteger("sample-rate");
+        this.mPCMEncodeBit = format.containsKey("pcm-encoding") ? format.getInteger("pcm-encoding") : 2;
     }
 
     public boolean configCodec(@NonNull MediaCodec codec, @NonNull MediaFormat format) {
-        codec.configure(format, (Surface) null, (MediaCrypto) null, 0);
+        codec.configure(format, null, null, 0);
         return true;
     }
 
@@ -49,9 +45,6 @@ public class AudioDecoder extends BaseDecoder {
         int minBufferSize = AudioTrack.getMinBufferSize(this.mSampleRate, channel, this.mPCMEncodeBit);
         this.mAudioOutTempBuf = new short[minBufferSize / 2];
         this.mAudioTrack = new AudioTrack(3, this.mSampleRate, channel, this.mPCMEncodeBit, minBufferSize, 1);
-        if (mAudioTrack == null) {
-            return false;
-        }
 
         mAudioTrack.play();
         return true;

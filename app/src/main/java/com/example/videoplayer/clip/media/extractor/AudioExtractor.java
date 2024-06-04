@@ -7,11 +7,6 @@ import androidx.annotation.Nullable;
 
 import java.nio.ByteBuffer;
 
-/**
- * @description: 音频数据提取器
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public class AudioExtractor implements IExtractor{
     private final MMExtractor mMediaExtractor;
 

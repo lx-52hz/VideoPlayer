@@ -13,11 +13,6 @@ import com.example.videoplayer.clip.media.extractor.IExtractor;
 import java.io.File;
 import java.nio.ByteBuffer;
 
-/**
- * @description: 文件描述
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public abstract class BaseDecoder implements IDecoder {
     private final String TAG = "BaseDecoder";
     private boolean mIsRunning;
@@ -42,27 +37,20 @@ public abstract class BaseDecoder implements IDecoder {
     private final String mFilePath;
 
     public enum DecodeState {
-        /**开始状态*/
         START,
-        /**解码中*/
         DECODING,
-        /**解码暂停*/
         PAUSE,
-        /**正在快进*/
         SEEKING,
-        /**解码完成*/
         FINISH,
-        /**解码器释放*/
         STOP
     }
 
-    @Nullable
     protected final IDecoderStateListener getMStateListener() {
         return this.mStateListener;
     }
 
-    protected final void setMStateListener(@Nullable IDecoderStateListener var1) {
-        this.mStateListener = var1;
+    protected final void setMStateListener(IDecoderStateListener listener) {
+        this.mStateListener = listener;
     }
 
     protected final int getMVideoWidth() {
@@ -165,47 +153,34 @@ public abstract class BaseDecoder implements IDecoder {
     }
 
     private final boolean init() {
-        CharSequence var1 = (CharSequence) this.mFilePath;
-        boolean var2 = false;
-        if (var1.length() != 0 && (new File(this.mFilePath)).exists()) {
-            if (!this.check()) {
-                return false;
-            } else {
+        if (this.mFilePath.length() != 0 && (new File(this.mFilePath)).exists()) {
+            if (this.check()) {
                 this.mExtractor = this.initExtractor(this.mFilePath);
-                if (this.mExtractor != null) {
-                    if (mExtractor == null) {
+
+                if (mExtractor.getFormat() != null) {
+                    if (!this.initParams()) {
                         return false;
                     }
 
-                    if (mExtractor.getFormat() != null) {
-                        if (!this.initParams()) {
-                            return false;
-                        }
-
-                        if (!this.initRender()) {
-                            return false;
-                        }
-
-                        if (!this.initCodec()) {
-                            return false;
-                        }
-
-                        return true;
+                    if (!this.initRender()) {
+                        return false;
                     }
+
+                    if (!this.initCodec()) {
+                        return false;
+                    }
+
+                    return true;
                 }
 
                 Log.w(this.TAG, "无法解析文件");
-                return false;
             }
         } else {
-            Log.w(this.TAG, "文件路径为空");
-            IDecoderStateListener var10000 = this.mStateListener;
-            if (var10000 != null) {
-                var10000.decoderError(this, "文件路径为空");
+            if (this.mStateListener != null) {
+                this.mStateListener.decoderError(this, "文件路径为空");
             }
-
-            return false;
         }
+        return false;
     }
 
     private final boolean initParams() {
@@ -225,10 +200,6 @@ public abstract class BaseDecoder implements IDecoder {
             }
 
             if (mExtractor == null) {
-                return false;
-            }
-
-            if (format == null) {
                 return false;
             }
 
@@ -252,10 +223,6 @@ public abstract class BaseDecoder implements IDecoder {
 
             String type = format.getString("mime");
             this.mCodec = MediaCodec.createDecoderByType(type);
-            MediaCodec var10001 = this.mCodec;
-            if (mCodec == null) {
-                return false;
-            }
 
             if (!this.configCodec(mCodec, format)) {
                 this.waitDecode();

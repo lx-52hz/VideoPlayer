@@ -22,8 +22,6 @@ public interface IDecoder extends Runnable {
 
     boolean isStop();
 
-//    void setSizeListener(@NotNull IDecoderProgress var1);
-
     void setStateListener(@Nullable IDecoderStateListener var1);
 
     int getWidth();

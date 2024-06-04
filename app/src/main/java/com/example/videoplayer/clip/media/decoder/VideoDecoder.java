@@ -1,7 +1,6 @@
 package com.example.videoplayer.clip.media.decoder;
 
 import android.media.MediaCodec;
-import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.util.Log;
 import android.view.Surface;
@@ -17,19 +16,14 @@ import com.example.videoplayer.clip.media.extractor.VideoExtractor;
 
 import java.nio.ByteBuffer;
 
-/**
- * @description: 视频解码
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public final class VideoDecoder extends BaseDecoder {
-    private final String TAG;
+
+    private static final String TAG = "VideoDecoder";
     private final SurfaceView mSurfaceView;
     private Surface mSurface;
 
     public VideoDecoder(@NonNull String path, @Nullable SurfaceView sfv, @Nullable Surface surface) {
         super(path);
-        this.TAG = "VideoDecoder";
         this.mSurfaceView = sfv;
         this.mSurface = surface;
     }
@@ -39,7 +33,7 @@ public final class VideoDecoder extends BaseDecoder {
             Log.w(this.TAG, "SurfaceView和Surface都为空，至少需要一个不为空");
             IDecoderStateListener listener = this.getMStateListener();
             if (listener != null) {
-                listener.decoderError((BaseDecoder) this, "显示器为空");
+                listener.decoderError(this, "显示器为空");
             }
 
             return false;
@@ -50,7 +44,7 @@ public final class VideoDecoder extends BaseDecoder {
 
     @NonNull
     public IExtractor initExtractor(@NonNull String path) {
-        return (IExtractor) (new VideoExtractor(path));
+        return new VideoExtractor(path);
     }
 
     public void initSpecParams(@NonNull MediaFormat format) {
@@ -59,7 +53,7 @@ public final class VideoDecoder extends BaseDecoder {
 
     public boolean configCodec(@NonNull final MediaCodec codec, @NonNull final MediaFormat format) {
         if (this.mSurface != null) {
-            codec.configure(format, this.mSurface, (MediaCrypto) null, 0);
+            codec.configure(format, this.mSurface, null, 0);
             this.notifyDecode();
         } else if (mSurfaceView != null && mSurfaceView.getHolder() != null && mSurfaceView.getHolder().getSurface() != null){
             mSurface = mSurfaceView.getHolder().getSurface();
@@ -98,8 +92,4 @@ public final class VideoDecoder extends BaseDecoder {
     public void doneDecode() {
     }
 
-    // $FF: synthetic method
-    public static final Surface access$getMSurface$p(VideoDecoder $this) {
-        return $this.mSurface;
-    }
 }

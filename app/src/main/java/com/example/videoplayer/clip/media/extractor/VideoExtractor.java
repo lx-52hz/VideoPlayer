@@ -6,11 +6,6 @@ import androidx.annotation.NonNull;
 
 import java.nio.ByteBuffer;
 
-/**
- * @description: 视频数据提取器
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public final class VideoExtractor implements IExtractor {
     private final MMExtractor mMediaExtractor;
 

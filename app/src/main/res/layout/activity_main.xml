@@ -21,6 +21,17 @@
             android:layout_column="2"
             android:layout_row="0"/>
 
+        <Button
+            android:id="@+id/play_media_player"
+            android:text="通过mediaplayer"
+            android:textSize="30sp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="3"
+            android:layout_row="0"/>
+
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
