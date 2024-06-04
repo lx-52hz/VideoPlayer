@@ -1,9 +1,9 @@
 package com.example.videoplayer.media;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,8 +13,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class MediaGLRender implements GLSurfaceView.Renderer {
-
-    private static final String TAG = "VideoRender";
 
     public interface RendererListener {
         void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig, int textureId);
@@ -37,27 +35,6 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
 
     private FloatBuffer mTriangleVertices;
 
-    private static final String mVertexShader = "" +
-            "uniform mat4 uMVPMatrix;\n" +
-            "uniform mat4 uSTMatrix;\n" +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec4 aTextureCoord;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "void main() {\n" +
-            "  gl_Position = uMVPMatrix * aPosition;\n" +
-            "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
-            "}\n";
-
-    private static final String mFragmentShader = "" +
-            "#extension GL_OES_EGL_image_external : require\n" +
-            "precision mediump float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "void main() {\n" +
-            "  vec3 centralColor = texture2D(sTexture, vTextureCoord).rgb;\n" +
-            "  gl_FragColor = vec4(0.299 * centralColor.r + 0.587 * centralColor.g + 0.114 * centralColor.b);\n" +
-            "}\n";
-
     private float[] mMVPMatrix = new float[16];
     private float[] mSTMatrix = new float[16];
 
@@ -69,67 +46,29 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
     private int maTextureHandle;
 
     private final RendererListener listener;
+    private final Context context;
 
-    public MediaGLRender(RendererListener listener) {
+    public MediaGLRender(Context context, RendererListener listener) {
+        this.context = context;
+        this.listener = listener;
+
         mTriangleVertices = ByteBuffer.allocateDirect(mTriangleVerticesData.length * FLOAT_SIZE_BYTES)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         mTriangleVertices.put(mTriangleVerticesData).position(0);
         Matrix.setIdentityM(mSTMatrix, 0);
-        this.listener = listener;
     }
 
     public float[] getSTMatrix() {
         return mSTMatrix;
     }
 
-    private int loadShader(int shaderType, String source) {
-        int shader = GLES20.glCreateShader(shaderType);
-        if (shader != 0) {
-            GLES20.glShaderSource(shader, source);
-            GLES20.glCompileShader(shader);
-            int[] compiled = new int[1];
-            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0);
-            if (compiled[0] == 0) {
-                Log.e(TAG, "Could not compile shader " + shaderType + ":");
-                Log.e(TAG, GLES20.glGetShaderInfoLog(shader));
-                GLES20.glDeleteShader(shader);
-                shader = 0;
-            }
-        }
-        return shader;
-    }
-
-    private int createProgram(String vertexSource, String fragmentSource) {
-        int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
-        if (vertexShader == 0) {
-            return 0;
-        }
-        int pixelShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentSource);
-        if (pixelShader == 0) {
-            return 0;
-        }
-
-        int program = GLES20.glCreateProgram();
-        if (program != 0) {
-            GLES20.glAttachShader(program, vertexShader);
-            GLES20.glAttachShader(program, pixelShader);
-            GLES20.glLinkProgram(program);
-            int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-            if (linkStatus[0] != GLES20.GL_TRUE) {
-                Log.e(TAG, "Could not link program: ");
-                Log.e(TAG, GLES20.glGetProgramInfoLog(program));
-                GLES20.glDeleteProgram(program);
-                program = 0;
-            }
-        }
-        return program;
-    }
-
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        mProgram = createProgram(mVertexShader, mFragmentShader);
+        MediaGLShader mediaGLShader = new MediaGLShader(context,
+                "glsl/media_vertex.glsl", "glsl/media_fragment.glsl");
+
+        mProgram = mediaGLShader.getShaderProgram();
         if (mProgram == 0) {
             return;
         }
@@ -138,15 +77,12 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
         muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         muSTMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uSTMatrix");
 
-        // Create texture
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures, 0);
-
         mTextureID = textures[0];
         GLES20.glBindTexture(GL_TEXTURE_EXTERNAL_OES, mTextureID);
         GLES20.glTexParameterf(GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
         if (listener != null) {
             listener.onSurfaceCreated(gl10, eglConfig, mTextureID);
         }

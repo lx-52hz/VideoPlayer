@@ -39,7 +39,7 @@ public class MediaGLView extends GLSurfaceView
 
     private void initRender(Context context){
         setEGLContextClientVersion(2);
-        mRenderer = new MediaGLRender(this);
+        mRenderer = new MediaGLRender(context, this);
         setRenderer(mRenderer);
     }
 

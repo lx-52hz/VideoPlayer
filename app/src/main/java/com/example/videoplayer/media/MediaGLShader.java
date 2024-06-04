@@ -64,7 +64,7 @@ public class MediaGLShader {
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             Log.e(TAG, "getGLSLContent: " + assetsPath);
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
+                stringBuilder.append(line).append("\n");
             }
         } catch (IOException e) {
             Log.e(TAG, "Error while closing resources: " + e.getMessage());
