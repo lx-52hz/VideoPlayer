@@ -1,11 +1,14 @@
 package com.example.videoplayer.media;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.SurfaceControl;
+import android.view.WindowManager;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +20,10 @@ public class MediaPlayManger {
     private static volatile MediaPlayManger playManger;
     private MediaPlayer mMediaPlayer;
     private PlayerMangerListener listener;
-    private SurfaceControl surfaceControl;
+    private MediaGLView mediaGLView;
+    private int defaultWidth = 0;
+    private int screenWidth = 0;
+    private boolean isFullScreen = false;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -34,14 +40,13 @@ public class MediaPlayManger {
         return playManger;
     }
 
-    public void initPlayer(MediaGLView mediaGLView, PlayerMangerListener listener) {
+    public void initPlayer(Context context, MediaGLView mediaGLView, int width, PlayerMangerListener listener) {
+        this.mediaGLView = mediaGLView;
+        this.defaultWidth = width;
         this.listener = listener;
         mMediaPlayer = new MediaPlayer();
         // 创建监听，初始化player
         mediaGLView.setSurfaceListener(surface -> {
-            if (mMediaPlayer == null) {
-                Log.e(TAG, "initPlayer: player is null");
-            }
             mMediaPlayer.setSurface(surface);
             mediaGLView.releaseSurface();
         });
@@ -50,13 +55,21 @@ public class MediaPlayManger {
         mMediaPlayer.setOnCompletionListener(mp -> {
             listener.onVideoPlayedCompletion();
         });
+
+        // 获取全屏宽度
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        screenWidth = windowManager.getCurrentWindowMetrics().getBounds().width();
     }
 
-    public void prepareVideo(String videoPath, boolean needPlay) {
-        if (mMediaPlayer != null) {
+    public boolean prepareVideo(String videoPath, boolean needPlay) {
+        if (mMediaPlayer != null && !"".equals(videoPath) && new File(videoPath).exists()) {
             try {
+                mMediaPlayer.reset();
                 mMediaPlayer.setDataSource(videoPath);
                 mMediaPlayer.prepare();
+
+                // 修改显示尺寸，确认显示尺寸
+                fixScreenSize();
 
                 // 获取第一帧画面
                 mMediaPlayer.start();
@@ -68,10 +81,12 @@ public class MediaPlayManger {
                 }
                 // 更新进度条
                 updateCurrentPosition();
+                return true;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+        return false;
     }
 
     public void pauseVideo() {
@@ -92,12 +107,7 @@ public class MediaPlayManger {
         return mMediaPlayer.isPlaying();
     }
 
-    public int getVideoDuration() {
-        return mMediaPlayer.getDuration();
-    }
-
     public void seekToPlay(int position) {
-        Log.d(TAG, "seekToPlay: " + position);
         if (mMediaPlayer != null) {
             mMediaPlayer.seekTo(position, MediaPlayer.SEEK_CLOSEST);
             // 更新进度条
@@ -116,21 +126,21 @@ public class MediaPlayManger {
             }
         } else if (seekMode == SeekMode.FORWARD_10) {
             int duration = mMediaPlayer.getDuration();
-
-            Log.d(TAG, "updatePlayProgress: " + duration + " " + currentPosition);
             if ((currentPosition + 10 * 1000) > duration) {
                 seekToPosition = duration;
             } else {
                 seekToPosition = currentPosition + 10 * 1000;
             }
         }
-        Log.d(TAG, "updatePlayProgress: " + seekToPosition);
         seekToPlay(seekToPosition);
     }
 
     public void releasePlayer() {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
+        }
+        if (mediaGLView != null) {
+            mediaGLView.releaseAll();
         }
     }
 
@@ -144,6 +154,28 @@ public class MediaPlayManger {
             // 如果在播放，就循环调用自己，触发进度条更新
             handler.postDelayed(this::updateCurrentPosition, 100);
         }
+    }
+
+    public void fullScreen(boolean isFullScreen) {
+        if (isFullScreen != this.isFullScreen) {
+            this.isFullScreen = isFullScreen;
+            fixScreenSize();
+        }
+    }
+
+    private void fixScreenSize() {
+        // 获取原始视频宽高
+        int videoWidth = mMediaPlayer.getVideoWidth();
+        int videoHeight = mMediaPlayer.getVideoHeight();
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mediaGLView.getLayoutParams();
+        if (isFullScreen) {
+            layoutParams.width = screenWidth;
+        } else {
+            layoutParams.width = defaultWidth;
+        }
+        layoutParams.height = layoutParams.width * videoHeight / videoWidth;
+        // 重新设置窗口尺寸高
+        mediaGLView.setLayoutParams(layoutParams);
     }
 
     public static String millTimeToClock(int currentPosition, boolean isTotalTime) {

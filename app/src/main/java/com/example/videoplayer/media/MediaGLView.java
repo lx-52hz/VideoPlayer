@@ -53,6 +53,18 @@ public class MediaGLView extends GLSurfaceView
         }
     }
 
+    public void releaseAll() {
+        if (videoSurface != null) {
+            videoSurface.release();
+        }
+        if (surfaceTexture != null) {
+            surfaceTexture.release();
+        }
+        if (mRenderer != null) {
+            mRenderer.release();
+        }
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig, int textureId) {
         surfaceTexture = new SurfaceTexture(textureId);

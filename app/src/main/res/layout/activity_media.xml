@@ -10,16 +10,8 @@
 
         <com.example.videoplayer.media.MediaGLView
             android:id="@+id/media_surface_view"
-            android:layout_width="800dp"
-            android:layout_height="450dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <com.example.videoplayer.media.MediaGLView
-            android:id="@+id/media_surface_full_view"
-            android:layout_width="960dp"
-            android:layout_height="540dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -27,13 +19,13 @@
         <LinearLayout
             android:id="@+id/seek_layout"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:layout_marginHorizontal="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/media_surface_view"
             app:layout_constraintBottom_toTopOf="@+id/media_back_btn">
 
             <TextView
@@ -55,7 +47,7 @@
 
             <TextView
                 android:id="@+id/total_process"
-                android:textColor="@color/black"
+                android:textColor="@color/blue"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:text="00:00"
@@ -67,36 +59,78 @@
         <Button
             android:id="@+id/media_back_btn"
             android:text="BACK"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/media_full_btn" />
+
+        <Button
+            android:id="@+id/media_full_btn"
+            android:text="FULL"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/media_back_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/media_re_btn" />
 
         <Button
             android:id="@+id/media_re_btn"
             android:text="REWIND"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/media_back_btn"
+            app:layout_constraintStart_toEndOf="@+id/media_full_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/media_pre_btn" />
+
+        <Button
+            android:id="@+id/media_pre_btn"
+            android:text="PREV"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/media_re_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/media_play_btn" />
 
         <Button
             android:id="@+id/media_play_btn"
             android:text="PLAY"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/media_re_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/media_fa_btn" />
 
+
         <Button
-            android:id="@+id/media_fa_btn"
-            android:text="FAST"
+            android:id="@+id/media_next_btn"
+            android:text="NEXT"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/media_play_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/media_fa_btn" />
+
+        <Button
+            android:id="@+id/media_fa_btn"
+            android:text="FAST"
+            android:layout_marginBottom="20dp"
+            android:elevation="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/media_next_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

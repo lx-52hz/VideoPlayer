@@ -89,8 +89,8 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onSurfaceChanged(GL10 gl10, int i, int i1) {
-
+    public void onSurfaceChanged(GL10 gl10, int width, int height) {
+        GLES20.glViewport(0, 0, width, height);
     }
 
     @Override
@@ -123,5 +123,9 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
         GLES20.glFinish();
+    }
+
+    public void release() {
+        GLES20.glDeleteProgram(mProgram);
     }
 }
