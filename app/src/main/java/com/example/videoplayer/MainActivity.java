@@ -13,9 +13,6 @@ import android.widget.Toast;
 
 import com.example.videoplayer.clip.ClipActivity;
 import com.example.videoplayer.databinding.ActivityMainBinding;
-import com.example.videoplayer.fivevideo.PlayFiveOnHuaweiActivity;
-import com.example.videoplayer.fivevideo.PlayFiveSameActivity;
-import com.example.videoplayer.fivevideo.PlayFiveVideosActivity;
 import com.example.videoplayer.glplayer.GLPlayerActivity;
 import com.example.videoplayer.media.MediaActivity;
 
@@ -41,11 +38,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        mainBinding.play5Video.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFiveVideosActivity.class)));
         mainBinding.playFullVideo.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFullScreenActivity.class)));
         mainBinding.play1Video.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, OneVideoActivity.class)));
         mainBinding.play5VideoHuawei.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFiveOnHuaweiActivity.class)));
-        mainBinding.play4VideoFanya.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, PlayFiveSameActivity.class)));
         mainBinding.playClipVideo.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ClipActivity.class)));
         mainBinding.playVideoWithGl.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, GLPlayerActivity.class)));
         mainBinding.playMediaPlayer.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MediaActivity.class)));

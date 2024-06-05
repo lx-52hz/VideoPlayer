@@ -10,11 +10,6 @@ import android.opengl.EGLSurface;
 import android.util.Log;
 import android.view.Surface;
 
-/**
- * @description: egl操作封装
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public class EGLCore {
     public static final int FLAG_RECORDABLE = 0x01;
     // Android 指定的标志

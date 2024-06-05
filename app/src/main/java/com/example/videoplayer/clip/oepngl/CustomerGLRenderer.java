@@ -15,11 +15,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @description: 文件描述
- * @author: xiongxunxiang
- * @date: 2021/3/17
- */
 public class CustomerGLRenderer implements SurfaceHolder.Callback2 {
     private RenderThread mThread = new RenderThread();
     private WeakReference<SurfaceView> mSurfaceView;

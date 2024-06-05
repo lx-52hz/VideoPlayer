@@ -5,11 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Surface;
+import android.view.View;
 
+import com.example.videoplayer.MainActivity;
 import com.example.videoplayer.R;;
 import com.example.videoplayer.clip.media.decoder.Frame;
 import com.example.videoplayer.clip.media.decoder.AudioDecoder;
@@ -26,9 +29,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ClipActivity extends AppCompatActivity {
 
     private ActivityClipBinding dataBinding;
-    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video2.mp4";
+    private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video5.mp4";
     private ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(2);
     private CustomerGLRenderer render;
+    private VideoDecoder decoder;
+    private AudioDecoder audioDecoder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,21 @@ public class ClipActivity extends AppCompatActivity {
         render = new CustomerGLRenderer();
         initVideo();
         render.setSurface(dataBinding.clipSurf);
+
+        dataBinding.playBtn.setOnClickListener(v -> {
+            if (decoder.isDecoding()) {
+                audioDecoder.pause();
+                decoder.pause();
+            } else {
+                audioDecoder.goOn();
+                decoder.goOn();
+            }
+        });
+
+        dataBinding.backBtn.setOnClickListener(v -> {
+            startActivity(new Intent(ClipActivity.this, MainActivity.class));
+            finish();
+        });
     }
 
     private void initVideo() {
@@ -45,19 +65,15 @@ public class ClipActivity extends AppCompatActivity {
         drawer.setAlpha(1.f);
         drawer.setVideoSize(1920, 1080);
         render.addDrawer(drawer);
-        drawer.getSurfaceTexture(new VideoDrawer.OnSurfaceTextureListener() {
-            @Override
-            public void onSurfaceTextureCreate(SurfaceTexture texture) {
-                initPlayer(texture);
-            }
-        });
+        drawer.getSurfaceTexture(this::initPlayer);
     }
 
-
     private void initPlayer(SurfaceTexture texture) {
-        VideoDecoder decoder = new VideoDecoder(path, null, new Surface(texture));
+        decoder = new VideoDecoder(path, null, new Surface(texture));
         threadPool.submit(decoder);
-        decoder.goOn();
+        audioDecoder = new AudioDecoder(path);
+        threadPool.submit(audioDecoder);
+
         decoder.setStateListener(new IDecoderStateListener() {
             @Override
             public void decoderPrepare(@Nullable BaseDecoder decoder) {
@@ -100,8 +116,7 @@ public class ClipActivity extends AppCompatActivity {
             }
         });
 
-        AudioDecoder audioDecoder = new AudioDecoder(path);
-        threadPool.submit(audioDecoder);
         audioDecoder.goOn();
+        decoder.goOn();
     }
 }

@@ -16,15 +16,6 @@ public class EGLSurfaceHolder {
         var10000.init(shareContext, flags);
     }
 
-    // $FF: synthetic method
-    public static void init$default(EGLSurfaceHolder var0, EGLContext var1, int var2, int var3, Object var4) {
-        if ((var3 & 1) != 0) {
-            var1 = (EGLContext) null;
-        }
-
-        var0.init(var1, var2);
-    }
-
     public final void createEGLSurface(@Nullable Object surface, int width, int height) {
         EGLCore var10001;
         EGLSurface var4;
@@ -39,19 +30,6 @@ public class EGLSurfaceHolder {
         }
 
         this.mEGLSurface = var4;
-    }
-
-    // $FF: synthetic method
-    public static void createEGLSurface$default(EGLSurfaceHolder var0, Object var1, int var2, int var3, int var4, Object var5) {
-        if ((var4 & 2) != 0) {
-            var2 = -1;
-        }
-
-        if ((var4 & 4) != 0) {
-            var3 = -1;
-        }
-
-        var0.createEGLSurface(var1, var2, var3);
     }
 
     public final void makeCurrent() {

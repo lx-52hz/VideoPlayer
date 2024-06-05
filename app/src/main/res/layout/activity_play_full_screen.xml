@@ -43,8 +43,7 @@
             android:text="点击进入全屏"
             app:layout_constraintStart_toEndOf="@+id/surf_back_btn"
             app:layout_constraintBottom_toTopOf="@+id/player_control_view"
-            app:layout_constraintEnd_toStartOf="@+id/surf_out_full_btn"
-            />
+            app:layout_constraintEnd_toStartOf="@+id/surf_out_full_btn" />
 
         <Button
             android:id="@+id/surf_out_full_btn"

@@ -1,4 +1,4 @@
-package com.example.videoplayer.fivevideo;
+package com.example.videoplayer;
 
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,60 +19,56 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 
-import com.example.videoplayer.MainActivity;
-import com.example.videoplayer.R;
-import com.example.videoplayer.databinding.ActivityPlayFiveVideosBinding;
+import com.example.videoplayer.databinding.ActivityPlayFiveOnHuaweiBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayFiveVideosActivity extends AppCompatActivity {
+@OptIn(markerClass = UnstableApi.class)
+public class PlayFiveOnHuaweiActivity extends AppCompatActivity {
 
-    private static final String TAG = "PlayFiveVideosActivity";
+    private static final String TAG = "PlayFiveOnHuaweiActivity";
 
-    private ActivityPlayFiveVideosBinding dataBinding;
+    private ActivityPlayFiveOnHuaweiBinding dataBinding;
     private boolean isNullPlayer = true;
     private List<ExoPlayer> playerList = new ArrayList<>();
     private ProgressiveMediaSource.Factory factory;
 
-    @OptIn(markerClass = UnstableApi.class)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dataBinding = DataBindingUtil.setContentView(PlayFiveVideosActivity.this, R.layout.activity_play_five_videos);
+        dataBinding = DataBindingUtil.setContentView(PlayFiveOnHuaweiActivity.this, R.layout.activity_play_five_on_huawei);
+
+        factory = new ProgressiveMediaSource.Factory(new DefaultDataSource.Factory(this))
+                .setDrmSessionManagerProvider(unusedMediaItem -> DrmSessionManager.DRM_UNSUPPORTED);
 
         initListener();
-
-        factory = new ProgressiveMediaSource.Factory(new DefaultDataSource.Factory(this)).setDrmSessionManagerProvider(unusedMediaItem -> DrmSessionManager.DRM_UNSUPPORTED);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (isNullPlayer) {
-            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_5.mp4")), dataBinding.surface5, false));
-            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_1.mp4")), dataBinding.surface1, true));
-            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_2.mp4")), dataBinding.surface2, true));
-            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_3.mp4")), dataBinding.surface3, true));
-            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_4.mp4")), dataBinding.surface4, true));
+            Log.d(TAG, "onResume: initPlayerList");
+            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_5.mp4")), dataBinding.surfaceH5, false));
+            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_1.mp4")), dataBinding.surfaceH1, true));
+            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_2.mp4")), dataBinding.surfaceH2, true));
+            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_3.mp4")), dataBinding.surfaceH3, true));
+            playerList.add(initSurfaceViewPlayer(MediaItem.fromUri(Uri.parse("asset:///video5_4.mp4")), dataBinding.surfaceH4, true));
             isNullPlayer = false;
         }
-
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "liuxin_onResume: " + dataBinding.parentView.getWidth() + " " + dataBinding.parentView.getHeight());
-    }
-
-    @OptIn(markerClass = UnstableApi.class)
     private ExoPlayer initSurfaceViewPlayer(MediaItem mediaItem, SurfaceView surfaceView, boolean isVolume) {
         ExoPlayer player = new ExoPlayer.Builder(getApplicationContext()).build();
-
         if (isVolume) {
-            player.setTrackSelectionParameters(player.getTrackSelectionParameters().buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, true).build());
+            player.setTrackSelectionParameters(
+                    player.getTrackSelectionParameters()
+                            .buildUpon()
+                            .setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, true)
+                            .build());
         }
 
         MediaSource mediaSource = factory.createMediaSource(mediaItem);
@@ -86,29 +82,31 @@ public class PlayFiveVideosActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        dataBinding.playBtn.setOnClickListener(v -> {
+        dataBinding.playHbtn.setOnClickListener(v -> {
             for (ExoPlayer exoPlayer : playerList) {
                 if (exoPlayer.getPlaybackState() == ExoPlayer.STATE_READY) {
                     if (exoPlayer.isPlaying()) {
                         exoPlayer.pause();
-                        dataBinding.playBtn.setText("PLAY");
+                        dataBinding.playHbtn.setText("PLAY");
                     } else {
+                        Log.d(TAG, "initListener: liuxin play start");
                         exoPlayer.play();
-                        dataBinding.playBtn.setText("PAUSE");
+                        dataBinding.playHbtn.setText("PAUSE");
+                        Log.d(TAG, "initListener: liuxin play end");
                     }
                 }
             }
         });
 
-        dataBinding.backBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(PlayFiveVideosActivity.this, MainActivity.class);
+        dataBinding.backHbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(PlayFiveOnHuaweiActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         });
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         if (isFinishing()) {
             if (!playerList.isEmpty() || !isNullPlayer) {
@@ -121,5 +119,4 @@ public class PlayFiveVideosActivity extends AppCompatActivity {
             }
         }
     }
-
 }

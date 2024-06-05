@@ -33,7 +33,6 @@ public class OneVideoActivity extends AppCompatActivity {
     private StringBuilder playProgress = new StringBuilder("00:00");
 
     private String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video5.mp4";
-//    private String path = "asset:///video5.mp4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

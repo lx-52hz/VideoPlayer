@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fivevideo.PlayFiveOnHuaweiActivity">
+        tools:context=".PlayFiveOnHuaweiActivity">
 
         <LinearLayout
             android:id="@+id/surface_hlist"

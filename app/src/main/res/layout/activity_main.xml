@@ -12,108 +12,85 @@
 
         <Button
             android:id="@+id/play_video_with_gl"
-            android:text="通过OpenGL渲染"
-            android:textSize="30sp"
+            android:text="OpenGL-exoplayer"
+            android:textSize="20sp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_column="2"
+            android:layout_column="1"
             android:layout_row="0"/>
 
         <Button
             android:id="@+id/play_media_player"
-            android:text="通过mediaplayer"
-            android:textSize="30sp"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_column="3"
-            android:layout_row="0"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_column="3"
-            android:layout_row="0"/>
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_column="2"
-            android:layout_row="3"/>
-
-        <Button
-            android:id="@+id/play_1_video"
-            android:text="播放1个视频"
-            android:textSize="30sp"
+            android:text="OpenGL-mediaplayer"
+            android:textSize="20sp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_row="0"/>
-
-        <Button
-            android:id="@+id/play_full_video"
-            android:text="播放并且可以切到全屏"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:textSize="30sp"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_row="1"/>
 
         <Button
             android:id="@+id/play_clip_video"
-            android:text="播放视频被裁剪"
+            android:text="openGL-medaicodec"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:textSize="30sp"
+            android:textSize="20sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="2"
+            android:layout_row="0"/>
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:layout_column="0"
-            android:layout_row="2"/>
+            android:layout_row="3"/>
 
-
-        <Button
-            android:id="@+id/play_5_video"
-            android:text="播放5个视频-LEXUS"
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:textSize="30sp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_column="1"
+            android:layout_column="3"
             android:layout_row="0"/>
 
         <Button
-            android:id="@+id/play_5_video_huawei"
-            android:text="播放5个视频-HUAWEI"
+            android:id="@+id/play_1_video"
+            android:text="播放1个视频-exoplayer"
+            android:textSize="20sp"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:textSize="30sp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_row="1"/>
+
+        <Button
+            android:id="@+id/play_5_video_huawei"
+            android:text="播放5个视频-exoplayer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textSize="20sp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
             android:layout_column="1"
             android:layout_row="1"/>
 
         <Button
-            android:id="@+id/play_4_video_fanya"
-            android:text="播放4个视频-FANYA"
+            android:id="@+id/play_full_video"
+            android:text="播放并且可以切到全屏-exoplayer"
             android:layout_width="0dp"
-            android:textSize="30sp"
             android:layout_height="0dp"
+            android:textSize="20sp"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:layout_column="1"
-            android:layout_row="2"/>
+            android:layout_column="2"
+            android:layout_row="1"/>
 
     </GridLayout>
 </layout>

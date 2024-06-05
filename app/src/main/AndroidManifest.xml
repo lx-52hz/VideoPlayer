@@ -25,19 +25,13 @@
             android:name=".clip.ClipActivity"
             android:exported="false" />
         <activity
-            android:name=".fivevideo.PlayFiveSameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".fivevideo.PlayFiveOnHuaweiActivity"
+            android:name=".PlayFiveOnHuaweiActivity"
             android:exported="false" />
         <activity
             android:name=".OneVideoActivity"
             android:exported="false" />
         <activity
             android:name=".PlayFullScreenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".fivevideo.PlayFiveVideosActivity"
             android:exported="false" />
         <activity
             android:name=".glplayer.GLPlayerActivity"
