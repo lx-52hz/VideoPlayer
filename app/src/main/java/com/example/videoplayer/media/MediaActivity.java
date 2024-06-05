@@ -31,11 +31,15 @@ public class MediaActivity extends AppCompatActivity {
     private MediaPlayManger playerManger;
     private StringBuilder playProgress = new StringBuilder("00:00");
     private int currentProcess = 0;
+    private int durationProcess = 0;
 
     private final MediaPlayManger.PlayerMangerListener listener = new MediaPlayManger.PlayerMangerListener() {
         @Override
         public void onVideoDurationInitialized(int millDuration) {
-            runOnUiThread(() -> binding.totalProcess.setText(MediaPlayManger.millTimeToClock(millDuration, true)));
+            runOnUiThread(() -> {
+                durationProcess = millDuration;
+                binding.totalProcess.setText(MediaPlayManger.millTimeToClock(millDuration, true));
+            });
         }
 
         @Override
@@ -44,7 +48,7 @@ public class MediaActivity extends AppCompatActivity {
                 playProgress.setLength(0);
                 playProgress.append(MediaPlayManger.millTimeToClock(millPosition, false));
                 binding.currentProcess.setText(playProgress);
-                binding.seekProcess.setProgress(millPosition * 1000 / playerManger.getVideoDuration());
+                binding.seekProcess.setProgress(millPosition * 1000 / durationProcess);
             });
         }
 
@@ -96,7 +100,7 @@ public class MediaActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                playerManger.seekToPlay(currentProcess * playerManger.getVideoDuration() / 1000);
+                playerManger.seekToPlay(currentProcess * durationProcess / 1000);
             }
         });
     }

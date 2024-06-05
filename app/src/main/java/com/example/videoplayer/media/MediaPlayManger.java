@@ -4,8 +4,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-
-import androidx.annotation.LongDef;
+import android.view.SurfaceControl;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -18,6 +17,7 @@ public class MediaPlayManger {
     private static volatile MediaPlayManger playManger;
     private MediaPlayer mMediaPlayer;
     private PlayerMangerListener listener;
+    private SurfaceControl surfaceControl;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -47,7 +47,9 @@ public class MediaPlayManger {
         });
 
         // 播放完成回调
-        mMediaPlayer.setOnCompletionListener(mp -> listener.onVideoPlayedCompletion());
+        mMediaPlayer.setOnCompletionListener(mp -> {
+            listener.onVideoPlayedCompletion();
+        });
     }
 
     public void prepareVideo(String videoPath, boolean needPlay) {
@@ -134,6 +136,9 @@ public class MediaPlayManger {
 
     public void updateCurrentPosition() {
         int currentPosition = mMediaPlayer.getCurrentPosition();
+        if (mMediaPlayer.getDuration() - currentPosition < 100) {
+            currentPosition = mMediaPlayer.getDuration();
+        }
         listener.onVideoCurrentPositionChanged(currentPosition);
         if (mMediaPlayer.isPlaying()) {
             // 如果在播放，就循环调用自己，触发进度条更新
@@ -144,6 +149,7 @@ public class MediaPlayManger {
     public static String millTimeToClock(int currentPosition, boolean isTotalTime) {
         if (isTotalTime) {
             int time = (int) Math.ceil(currentPosition / 1000f);
+            // 向上取整60.463 -> 61
             int minutes = (time % 3600) / 60;
             int seconds = time % 60;
             return String.format(Locale.CHINA, "%02d:%02d", minutes, seconds);

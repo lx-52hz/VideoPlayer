@@ -14,8 +14,15 @@
             android:layout_height="450dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/seek_layout"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.example.videoplayer.media.MediaGLView
+            android:id="@+id/media_surface_full_view"
+            android:layout_width="960dp"
+            android:layout_height="540dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/seek_layout"
@@ -42,6 +49,7 @@
                 android:id="@+id/seek_process"
                 android:layout_width="0dp"
                 android:max="1000"
+                android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
