@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 
 import androidx.annotation.Nullable;
@@ -13,6 +15,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MediaGLView extends GLSurfaceView
         implements MediaGLRender.RendererListener, SurfaceTexture.OnFrameAvailableListener {
+
+    private static final String TAG = "MediaGLView";
 
     public interface SurfaceListener {
         void onSurfaceCreated(Surface surface);
@@ -26,6 +30,8 @@ public class MediaGLView extends GLSurfaceView
     private boolean isSurfaceUpdated = false;
     @Nullable
     private SurfaceListener listener = null;
+
+    private int mWidth, mHeight;
 
     public MediaGLView(Context context) {
         super(context);
@@ -96,5 +102,52 @@ public class MediaGLView extends GLSurfaceView
         synchronized (this) {
             isSurfaceUpdated = true;
         }
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // 在 ACTION_DOWN 事件时触发 performClick 方法
+                performClick();
+
+                // 判断是否响应点击区域进行裁剪
+                clipVideo(event.getX(), event.getY());
+
+                return true;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        this.mWidth = w;
+        this.mHeight = h;
+        super.onSizeChanged(w, h, oldW, oldH);
+    }
+
+    private void clipVideo(float x, float y) {
+        int halfWidth = mWidth / 2;
+        int halfHeight = mHeight / 2;
+        MediaConstants.VerticesType type = MediaConstants.VerticesType.DEFAULT_VERTICES;
+        if (x < halfWidth && y < halfHeight) {
+            Log.d(TAG, "clipVideo: 点击左上区域");
+            type = MediaConstants.VerticesType.LEFT_TOP_VERTICES;
+        } else if (x < halfWidth && y >= halfHeight) {
+            Log.d(TAG, "clipVideo: 点击左下区域");
+            type = MediaConstants.VerticesType.LEFT_BOTTOM_VERTICES;
+        } else if (x >= halfWidth && y < halfHeight) {
+            Log.d(TAG, "clipVideo: 点击右上区域");
+            type = MediaConstants.VerticesType.RIGHT_TOP_VERTICES;
+        } else if (x >= halfWidth && y >= halfHeight) {
+            Log.d(TAG, "clipVideo: 点击右下区域");
+            type = MediaConstants.VerticesType.RIGHT_BOTTOM_VERTICES;
+        }
+        mRenderer.setTriangleVerticesData(type);
     }
 }

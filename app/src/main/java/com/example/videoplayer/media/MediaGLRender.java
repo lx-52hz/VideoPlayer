@@ -25,13 +25,7 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
     private static final int TRIANGLE_VERTICES_DATA_POS_OFFSET = 0;
     private static final int TRIANGLE_VERTICES_DATA_UV_OFFSET = 3;
 
-    private static final float[] mTriangleVerticesData = {
-            // X, Y, Z, U, V
-            -1.0f, -1.0f, 0, 0.f, 0.f,
-            1.0f, -1.0f, 0, 1.f, 0.f,
-            -1.0f,  1.0f, 0, 0.f, 1.f,
-            1.0f,  1.0f, 0, 1.f, 1.f,
-    };
+    private float[] mTriangleVerticesData;
 
     private FloatBuffer mTriangleVertices;
 
@@ -52,15 +46,36 @@ public class MediaGLRender implements GLSurfaceView.Renderer {
         this.context = context;
         this.listener = listener;
 
+        setTriangleVerticesData(MediaConstants.VerticesType.DEFAULT_VERTICES);
+    }
+
+    public float[] getSTMatrix() {
+        return mSTMatrix;
+    }
+
+    public void setTriangleVerticesData(MediaConstants.VerticesType type) {
+        switch (type) {
+            case DEFAULT_VERTICES:
+                mTriangleVerticesData = MediaConstants.DEFAULT_VERTICES;
+                break;
+            case LEFT_TOP_VERTICES:
+                mTriangleVerticesData = MediaConstants.LEFT_TOP_VERTICES;
+                break;
+            case RIGHT_TOP_VERTICES:
+                mTriangleVerticesData = MediaConstants.RIGHT_TOP_VERTICES;
+                break;
+            case LEFT_BOTTOM_VERTICES:
+                mTriangleVerticesData = MediaConstants.LEFT_BOTTOM_VERTICES;
+                break;
+            case RIGHT_BOTTOM_VERTICES:
+                mTriangleVerticesData = MediaConstants.RIGHT_BOTTOM_VERTICES;
+                break;
+        }
         mTriangleVertices = ByteBuffer.allocateDirect(mTriangleVerticesData.length * FLOAT_SIZE_BYTES)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
         mTriangleVertices.put(mTriangleVerticesData).position(0);
         Matrix.setIdentityM(mSTMatrix, 0);
-    }
-
-    public float[] getSTMatrix() {
-        return mSTMatrix;
     }
 
     @Override
