@@ -32,6 +32,7 @@ public class MediaGLView extends GLSurfaceView
     private SurfaceListener listener = null;
 
     private int mWidth, mHeight;
+    private boolean canClipVideo = false;
 
     public MediaGLView(Context context) {
         super(context);
@@ -117,7 +118,9 @@ public class MediaGLView extends GLSurfaceView
                 performClick();
 
                 // 判断是否响应点击区域进行裁剪
-                clipVideo(event.getX(), event.getY());
+                if (canClipVideo) {
+                    clipVideo(event.getX(), event.getY());
+                }
 
                 return true;
         }

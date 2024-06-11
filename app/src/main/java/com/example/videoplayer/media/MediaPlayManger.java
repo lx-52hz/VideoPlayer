@@ -1,6 +1,7 @@
 package com.example.videoplayer.media;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
@@ -88,6 +89,35 @@ public class MediaPlayManger {
         }
         return false;
     }
+
+    public boolean prepareVideo(AssetFileDescriptor afd, boolean needPlay) {
+        if (mMediaPlayer != null) {
+            try {
+                mMediaPlayer.reset();
+                mMediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mMediaPlayer.prepare();
+
+                // 修改显示尺寸，确认显示尺寸
+                fixScreenSize();
+
+                // 获取第一帧画面
+                mMediaPlayer.start();
+                // 通知视频总时长
+                listener.onVideoDurationInitialized(mMediaPlayer.getDuration());
+                // 显示视频第一帧
+                if (!needPlay && mMediaPlayer.isPlaying()) {
+                    handler.postDelayed(() -> mMediaPlayer.pause(), 10);
+                }
+                // 更新进度条
+                updateCurrentPosition();
+                return true;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
 
     public void pauseVideo() {
         if (mMediaPlayer.isPlaying()) {

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import com.example.videoplayer.MainActivity;
 import com.example.videoplayer.R;
 import com.example.videoplayer.databinding.ActivityMediaBinding;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,8 +76,15 @@ public class MediaActivity extends AppCompatActivity {
         initData();
 
         playerManger = MediaPlayManger.getInstance();
-        playerManger.initPlayer(getApplication(), binding.mediaSurfaceView, 1120, listener);
+        playerManger.initPlayer(getApplication(), binding.mediaSurfaceView, 800, listener);
         playerManger.prepareVideo(getPath(0), false);
+
+//        try {
+//            AssetFileDescriptor afd1 = getApplication().getAssets().openFd("video/video1.mp4");
+//            playerManger.prepareVideo(afd1, true);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     @Override

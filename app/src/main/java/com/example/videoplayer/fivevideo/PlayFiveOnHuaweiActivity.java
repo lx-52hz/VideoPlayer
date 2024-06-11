@@ -1,4 +1,4 @@
-package com.example.videoplayer;
+package com.example.videoplayer.fivevideo;
 
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 
+import com.example.videoplayer.MainActivity;
+import com.example.videoplayer.R;
 import com.example.videoplayer.databinding.ActivityPlayFiveOnHuaweiBinding;
 
 import java.util.ArrayList;
